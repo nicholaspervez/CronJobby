@@ -31,12 +31,9 @@ import axios from "axios";
 
 async function forEachFunction(uid) {
   try {
-    console.log("trying this");
     const todaysFood = await fetch(`${backendURL}/getTodaysFood/${uid}`);
-    console.log("todays food :", todaysFood);
-    //   const data = JSON.stringify(todaysFood);
-    //   console.log('data : ', data)
-    if (todaysFood.length > 0) {
+    if (todaysFood.length > 0) 
+    {
       axios.post(`https://app.nativenotify.com/api/indie/notification`, {
         subID: `${uid}`,
         appId: 6107,
@@ -54,16 +51,14 @@ async function getNotification() {
   const userArray = await fetch(`${backendURL}/getAllUsers`);
   const data = await userArray.json();
   const users = data.payload;
-  console.log('this is returned users from db : ',users)
-  userArray.forEach((obj) => {
-    console.log(obj.uid);
+  users.forEach((obj) => {
+    console.log('this is user id : ',obj.uid);
     forEachFunction(obj.uid);
   });
 }
 
-getNotification()
 
-// schedule("0 9 * * * ", async () => getNotification(), {
-//   scheduled: true,
-//   timezone: "Europe/London",
-// });
+schedule("0 9 * * * ", async () => getNotification(), {
+  scheduled: true,
+  timezone: "Europe/London",
+});
